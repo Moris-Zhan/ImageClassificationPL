@@ -52,14 +52,14 @@ I use the **`round of mean beauty score`** to train the classification model.
 ## Classification Models - based on LightningModule (include torchvision model)
 - **cnn**
 - **MyResNet**/**ResNet**
-- **squeezenet**
-- **mobilenet**
-- **shufflenet**
-- **googlenet**
-- **inception**
-- **denseNet** 
-- **alexNet**  
-- **vggNet** 
+- **SqueezeNet**
+- **MobileNet**
+- **ShuffleNet**
+- **GoogleNet**
+- **Inception**
+- **DenseNet** 
+- **AlexNet**  
+- **VGGNet** 
 
 ## Prerequisites
 * **Windows 10**
@@ -84,22 +84,22 @@ I use the **`round of mean beauty score`** to train the classification model.
 * **For `SCUT` I prepare code to predict face in `predict.py`, which need prepare face_landmarks and dlib library to make `frontal_face_detector`, these data are put in extra**.
 * **`shape_predictor_68_face_landmarks.dat` download from [here](https://github.com/davisking/dlib-models/blob/master/shape_predictor_68_face_landmarks.dat.bz2)**.
 
-### 1. Train + Evaluate
+### Execute (Train/Val + Test)
 #### AOI (include predict Dataframe)
 ```python
-python run.py --use AOIModule
+python run.py --use AOIModule --model SqueezeNet
 ```
 #### EdgeAOI (include predict Dataframe)
 ```python
-python run.py --use EdgeAOIModule
+python run.py --use EdgeAOIModule --model SqueezeNet
 ```
 #### SCUT
 ```python
-python run.py --use SCUTModule
+python run.py --use SCUTModule --model SqueezeNet
 ```
 #### HandWrite
 ```python
-python run.py --use HandWriteModule
+python run.py --use HandWriteModule --model SqueezeNet
 ```
 
 ## Reference
