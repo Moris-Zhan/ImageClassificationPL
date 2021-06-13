@@ -54,7 +54,7 @@ This topic takes flexible electronic displays as the inspection target, and hope
 
   Download the classification images and organize folder from [EdgeAOI](https://aidea-web.tw/topic/6354136b-3301-4306-aa5e-07fd07e1838a?focus=intro). Make sure to put the files as the following structure:
   
-  ```
+```
   Edge AI Competition – AOI
   ├── train_images
   │   ├── 0
@@ -72,7 +72,7 @@ This topic takes flexible electronic displays as the inspection target, and hope
 
   Download the classification images and organize folder from [HandWriteModule](https://tbrain.trendmicro.com.tw/Competitions/Details/14). Make sure to put the files as the following structure:
   
-  ```
+```
   中文手寫影像辨識
   ├── train
   │   ├── 0
