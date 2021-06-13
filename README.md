@@ -1,5 +1,9 @@
 # ImageClassification
 My Frame work for ImageClassification with pytorch Lightning + Albumentations
+
+### Status
+- [ ] Lightning with Argument Parser
+
 ## Overview
 I organizize the object detection algorithms proposed in recent years, and focused on **`AOI`** , **`SCUT`** , **`EdgeAOI`** and **`HandWrite`** Dataset.
 
