@@ -49,6 +49,43 @@ I use the **`round of mean beauty score`** to train the classification model.
       ├── 0 (Default)
 ```
 
+- **EdgeAOI**:
+This topic takes flexible electronic displays as the inspection target, and hopes to interpret the classification of defects through data science to improve the effectiveness of AOI.
+
+  Download the classification images and organize folder from [EdgeAOI](https://aidea-web.tw/topic/6354136b-3301-4306-aa5e-07fd07e1838a?focus=intro). Make sure to put the files as the following structure:
+  
+  ```
+  Edge AI Competition – AOI
+  ├── train_images
+  │   ├── 0
+  │   ├── 1
+  │   ├── 2  
+  │   ├── 3 
+  │   ├── 4 
+  │   ├── 5 
+  │     
+  │── test_images
+      ├── 0 (Default)
+```
+
+- **HandWriteModule**:
+
+  Download the classification images and organize folder from [HandWriteModule](https://tbrain.trendmicro.com.tw/Competitions/Details/14). Make sure to put the files as the following structure:
+  
+  ```
+  中文手寫影像辨識
+  ├── train
+  │   ├── 0
+  │   ├── 1
+  │   ├── 2  
+  │   ├── 3 
+  │   ├── ... 
+  │   ├── 799 
+  │     
+  │── test_images
+      ├── 0 (Default)
+```
+
 ## Classification Models - based on LightningModule (include torchvision model)
 - **cnn**
 - **MyResNet**/**ResNet**
