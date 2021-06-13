@@ -1,13 +1,12 @@
 # ImageClassification
 My Frame work for ImageClassification with pytorch Lightning + Albumentations
 ## Overview
-I organizize the object detection algorithms proposed in recent years, and focused on **`AOI`** and **`SCUT`** Dataset.
-This frame work also include **`EarlyStopping mechanism`**.
+I organizize the object detection algorithms proposed in recent years, and focused on **`AOI`** , **`SCUT`** , **`EdgeAOI`** and **`HandWrite`** Dataset.
 
 
 ## Datasets:
 
-I used 3 different datases: **`AOI`, `SCUT`** . Statistics of datasets I used for experiments is shown below
+I used 4 different datases: **`AOI`** , **`SCUT`** , **`EdgeAOI`** and **`HandWrite`** . Statistics of datasets I used for experiments is shown below
 
 - **AOI**:
 This topic takes flexible electronic displays as the inspection target, and hopes to interpret the classification of defects through data science to improve the effectiveness of AOI.
@@ -50,27 +49,33 @@ I use the **`round of mean beauty score`** to train the classification model.
       ├── 0 (Default)
 ```
 
-## Methods
+## Classification Models - based on LightningModule (include torchvision model)
 - **cnn**
-- **resnet**
-- **pre_resnet**
-- **pre_squeezenet**
-- **pre_mobilenet**
-- **pre_shufflenet**
-- **pre_googlenet**
-- **pre_inception**
+- **MyResNet**/**ResNet**
+- **squeezenet**
+- **mobilenet**
+- **shufflenet**
+- **googlenet**
+- **inception**
+- **denseNet** 
+- **alexNet**  
+- **vggNet** 
 
 ## Prerequisites
 * **Windows 10**
-* **CUDA 10.1 (lower versions may work but were not tested)**
-* **NVIDIA GPU 1660 + CuDNN v7.3**
+* **CUDA 10.2**
+* **NVIDIA GPU 1660 + CuDNN v7.605**
 * **python 3.6.9**
-* **pytorch 1.10**
-* **opencv (cv2)**
-* **numpy**
-* **torchvision 0.4**
-* **torchsummary**
+* **pytorch 1.81**
+* **opencv-python 4.1.1.26**
+* **numpy 1.19.5**
+* **torchvision 0.9**
+* **torchsummary 1.5.1**
+* **Pillow 7.2.0**
 * **dlib==19.21**
+* **tensorflow-gpu 2.2.0**
+* **tensorboard 2.5.0** 
+* **pytorch-lightning 1.2.6**
 
 ## Usage
 ### 0. Prepare the dataset
@@ -82,17 +87,19 @@ I use the **`round of mean beauty score`** to train the classification model.
 ### 1. Train + Evaluate
 #### AOI (include predict Dataframe)
 ```python
-python train.py --model pre_googlenet --dataset AOI --batch_size 4 --n_gpu 1
+python run.py --use AOIModule
 ```
-
+#### EdgeAOI (include predict Dataframe)
+```python
+python run.py --use EdgeAOIModule
+```
 #### SCUT
 ```python
-python train_facerank.py --model pre_googlenet --dataset SCUT --batch_size 4 --n_gpu 1
+python run.py --use SCUTModule
 ```
-
-### 2. Predict Face Score
+#### HandWrite
 ```python
-python predict.py --model pre_googlenet --dataset SCUT --experiment_dir "run\AOI\pre_googlenet\experiment_2"
+python run.py --use HandWriteModule
 ```
 
 ## Reference
@@ -100,3 +107,5 @@ python predict.py --model pre_googlenet --dataset SCUT --experiment_dir "run\AOI
 - Transfer Learning - Fine tune : https://hackmd.io/@lido2370/HyLTOlSn4?type=view
 - ImageFolder : https://blog.csdn.net/TH_NUM/article/details/80877435
 - pytorch-summary : https://github.com/sksq96/pytorch-summary
+- Albumentations : https://albumentations.ai/docs/examples/pytorch_classification/
+- pytorch-lightning : https://pytorch-lightning.readthedocs.io/en/latest/
