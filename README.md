@@ -2,6 +2,14 @@
 My Frame work for ImageClassification with pytorch Lightning + Albumentations
 
 ### Status
+- [x] DataSet
+- [x] Training/Validiation Step
+- [x] TensorBoardLogger callback
+- [x] ModelCheckpoint callback
+- [x] Learning Rate Monitor
+- [x] GPUStats Monitor
+- [x] Early stop callback
+- [x] Read Best model path
 - [ ] Lightning with Argument Parser
 
 ## Overview
