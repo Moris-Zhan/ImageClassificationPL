@@ -1,5 +1,5 @@
 # ImageClassification
-My Frame work for ImageClassification 
+My Frame work for ImageClassification with pytorch Lightning + Albumentations
 ## Overview
 I organizize the object detection algorithms proposed in recent years, and focused on **`AOI`** and **`SCUT`** Dataset.
 This frame work also include **`EarlyStopping mechanism`**.
