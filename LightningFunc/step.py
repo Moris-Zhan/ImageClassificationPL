@@ -9,14 +9,11 @@ def training_step(self, batch, batch_idx):
     self.reference_image = x
     out = self.forward(x)
     loss = self.criterion(out, y) 
-    self.log('Loss/Train_Step', loss) # Logging to TensorBoard by default 
     
     # acc
     _, predicted = torch.max(out, dim=1)
     train_acc = self.accuracy_score(predicted.cpu(), y.cpu()).clone().detach().requires_grad_(True)
 
-    values = {'Loss/Train': loss}
-    self.log_dict(values, logger=True, on_epoch=False)
     self.logger.experiment.add_scalars("Loss/Step", {"Train":loss}, self.global_step)
 
     return {'loss':loss, 'acc':train_acc}
@@ -47,13 +44,13 @@ def validation_step(self, batch, batch_idx):
     out = self.forward(x)
     loss = self.criterion(out, y) 
 
-    values = {'Loss/Val':loss}
+    # loss
+    values = {'val_loss':loss}
     self.log_dict(values, logger=True, on_epoch=True)
-    self.logger.experiment.add_scalars("Loss/Step", {"Val":loss}, self.global_step)
 
     # acc
     _, predicted = torch.max(out, dim=1)
-    val_acc = self.accuracy_score(predicted.cpu(), y.cpu()).clone().detach().requires_grad_(True)
+    val_acc = self.accuracy_score(predicted.cpu(), y.cpu()).clone().detach().requires_grad_(False)
 
     return {'val_loss': loss, 'val_acc': val_acc}
 
@@ -62,6 +59,7 @@ def validation_epoch_end(self, outputs): # 在Validation的一個Epoch結束後�
     avg_val_acc = torch.stack([x['val_acc'] for x in outputs]).mean()
 
     self.logger.experiment.add_scalars("Loss/Epoch", {"Val":avg_loss}, self.current_epoch)
+    self.logger.experiment.add_scalars("Loss/Step", {"Val":avg_loss}, self.global_step)
 
     self.logger.experiment.add_scalars("Accuracy/Epoch", {"Val":avg_val_acc}, self.current_epoch) 
 
@@ -88,7 +86,7 @@ def test_epoch_end(self, outputs, only_pred = True): # 在test的一個Epoch結�
 
     total_predict_list = torch.stack([x['predicted'] for x in outputs]).tolist()   
 
-    if self.target != None:
+    if len(self.target) != 0:
         self.target['Label'] = total_predict_list        
         tensorboard_logs = self.writeCSV()
         return {'progress_bar': tensorboard_logs}
