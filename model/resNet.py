@@ -8,6 +8,7 @@ from LightningFunc.step import *
 from LightningFunc.accuracy import *
 from LightningFunc.optimizer import *
 from LightningFunc.utils import *
+from LightningFunc.losses import *
 
 def conv3x3(in_channels, out_channels, stride=1):
     return nn.Conv2d(in_channels, out_channels, kernel_size=3,
@@ -37,8 +38,14 @@ class ResidualBlock(pl.LightningModule):
         return out
 
 class MyResNet(pl.LightningModule):
-    def __init__(self, num_classes, target, checkname):
+    def __init__(self, num_classes, target, args):
         super(MyResNet, self).__init__()
+        self.num_classes = num_classes
+        self.args = args
+
+        self.__build_model()
+        self.criterion = get_criterion(self.args.criterion)
+
         # 使用序列工具快速构建
         block = ResidualBlock
         layers = [2, 2, 2, 2]
@@ -66,9 +73,8 @@ class MyResNet(pl.LightningModule):
         setattr(MyResNet, "write_Best_model_path", write_Best_model_path)
         setattr(MyResNet, "read_Best_model_path", read_Best_model_path)
 
-        self.criterion = nn.CrossEntropyLoss()
         self.target = target
-        self.checkname = checkname
+        self.checkname = "MyResNet"
 
     def make_layer(self, block, out_channels, blocks, stride=1):
         downsample = None
@@ -106,12 +112,13 @@ def init_weights(m):
         m.bias.data.fill_(0.01)
 
 class ResNet(pl.LightningModule):
-    def __init__(self, num_classes, target):
+    def __init__(self, num_classes, target, args):
         super(ResNet, self).__init__()
         self.num_classes = num_classes
+        self.args = args
 
         self.__build_model()
-
+        self.criterion = get_criterion(self.args.criterion)
         setattr(ResNet, "training_step", training_step)
         setattr(ResNet, "training_epoch_end", training_epoch_end)
         setattr(ResNet, "validation_step", validation_step)
@@ -125,7 +132,6 @@ class ResNet(pl.LightningModule):
         setattr(ResNet, "write_Best_model_path", write_Best_model_path)
         setattr(ResNet, "read_Best_model_path", read_Best_model_path)
         
-        self.criterion = nn.CrossEntropyLoss()
         self.target = target
         self.checkname = self.backbone
 

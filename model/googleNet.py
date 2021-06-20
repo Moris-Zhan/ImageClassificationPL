@@ -9,6 +9,7 @@ from LightningFunc.step import *
 from LightningFunc.accuracy import *
 from LightningFunc.optimizer import *
 from LightningFunc.utils import *
+from LightningFunc.losses import *
 
 def init_normal(m):
     if type(m) == nn.Linear:
@@ -21,12 +22,13 @@ def init_weights(m):
 
 
 class GoogleNet(pl.LightningModule):
-    def __init__(self, num_classes, target):
+    def __init__(self, num_classes, target, args):
         super(GoogleNet, self).__init__()
         self.num_classes = num_classes
+        self.args = args
 
         self.__build_model()
-
+        self.criterion = get_criterion(self.args.criterion)
         setattr(GoogleNet, "training_step", training_step)
         setattr(GoogleNet, "training_epoch_end", training_epoch_end)
         setattr(GoogleNet, "validation_step", validation_step)
@@ -41,7 +43,6 @@ class GoogleNet(pl.LightningModule):
         setattr(GoogleNet, "read_Best_model_path", read_Best_model_path)
 
         
-        self.criterion = nn.CrossEntropyLoss()
         self.target = target
         self.checkname = self.backbone
 

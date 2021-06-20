@@ -81,10 +81,10 @@ class DatasetFromSubset(Dataset):
 
 class SCUTModule(pl.LightningDataModule):
        
-    def __init__(self, bsz):
+    def __init__(self, batch_size):
         super().__init__()
         SCUT()
-        self.batch_size = bsz
+        self.batch_size = batch_size
         self.name = "SCUTModule"
         self.root = 'D:\\WorkSpace\\JupyterWorkSpace\\DataSet\\Image-Classification\\SCUT-FBP5500_v2\\'
         self.classes = list(range(1,6))    
@@ -157,5 +157,5 @@ class SCUTModule(pl.LightningDataModule):
 
 
 if __name__ == '__main__':    
-    dm = SCUTModule(processed=True, bsz=5)
+    dm = SCUTModule(processed=True, batch_size=5)
     dm.setup('fit')

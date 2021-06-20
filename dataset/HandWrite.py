@@ -75,10 +75,10 @@ class HandWriteModule(pl.LightningDataModule):
         cls_path = os.path.join(self.root, '%s_images'%("test"), '%s\\%s'%(cls,id) )
         return cls_path   
     
-    def __init__(self, bsz):
+    def __init__(self, batch_size):
         super().__init__()
         
-        self.batch_size = bsz
+        self.batch_size = batch_size
         self.name = "HandWriteModule"
         self.root = "D:\\WorkSpace\\JupyterWorkSpace\\DataSet\\Image-Classification\\中文手寫影像辨識"
         self.classes = HandWrite().classes  
@@ -156,5 +156,5 @@ class HandWriteModule(pl.LightningDataModule):
         return self.num_classes
 
 if __name__ == '__main__':    
-    dm = HandWriteModule(processed=True, bsz=5)
+    dm = HandWriteModule(processed=True, batch_size=5)
     dm.setup('fit')

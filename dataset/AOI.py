@@ -57,10 +57,10 @@ class DatasetFromSubset(Dataset):
 
 class AOIModule(pl.LightningDataModule):
    
-    def __init__(self, bsz):
+    def __init__(self, batch_size):
         super().__init__()
         AOI()
-        self.batch_size = bsz
+        self.batch_size = batch_size
         self.name = "EdgeAOIModule"
         self.root = 'D:\\WorkSpace\\JupyterWorkSpace\\DataSet\\Image-Classification\\AOI自動光學瑕疵檢測\\Stage1\\'
         self.classes = ["normal", "void", " horizontal defect", "vertical defect", "edge defect", "particle"]    
@@ -135,5 +135,5 @@ class AOIModule(pl.LightningDataModule):
         return self.num_classes
 
 if __name__ == '__main__':    
-    dm = AOIModule(processed=True, bsz=5)
+    dm = AOIModule(processed=True, batch_size=5)
     dm.setup('fit')

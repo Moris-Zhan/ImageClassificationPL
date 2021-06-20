@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 def saveDetail(self):
     self.sample = (8, 3, 512, 512)
     model_stats = summary(self.model.cuda(), self.sample)
-    dir = os.path.join("log_dir", self.data_name, self.checkname)
+    dir = os.path.join("log_dir", self.args.data_module, self.checkname)
     os.makedirs(dir, exist_ok=True)
     summary_str = str(model_stats)
     summaryfile = os.path.join(dir, 'summary.txt')
@@ -17,13 +17,13 @@ def saveDetail(self):
 
 
 def writeCSV(self):    
-    dir = os.path.join("log_dir", self.data_name ,self.checkname)  
+    dir = os.path.join("log_dir", self.args.data_module ,self.checkname)  
     self.target.to_csv(os.path.join(dir, 'pred.csv'), index=False)     
     tensorboard_logs = {'Info': "Write Successed!!!"}
     return tensorboard_logs
 
 def write_Best_model_path(self):  
-    dir = os.path.join("log_dir", self.data_name ,self.checkname)  
+    dir = os.path.join("log_dir", self.args.data_module ,self.checkname)  
     best_model_path = self.checkpoint_callback.best_model_path
     if (best_model_path!=""):
         best_model_file = os.path.join(dir, 'best_model_path.txt')
@@ -33,13 +33,13 @@ def write_Best_model_path(self):
         best_model_file.close()
 
 def read_Best_model_path(self):  
-    dir = os.path.join("log_dir", self.data_name ,self.checkname)  
+    dir = os.path.join("log_dir", self.args.data_module ,self.checkname)  
     best_model_file = os.path.join(dir, 'best_model_path.txt')
     if os.path.exists(best_model_file):
         best_model_file = open(best_model_file, 'r', encoding="utf-8")
         best_model_path = best_model_file.readline().strip()
         print("\nLoad best_model_path : %s \n"% best_model_path)
-        self.load_from_checkpoint(checkpoint_path=best_model_path, num_classes=self.num_classes, target=self.target)
+        self.load_from_checkpoint(checkpoint_path=best_model_path, num_classes=self.num_classes, target=self.target, args=self.args)
         best_model_file.close()    
     else:
         print("No model can load \n")

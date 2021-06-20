@@ -42,30 +42,60 @@ from dataset.EdgeAOI import EdgeAOIModule
 from dataset.SCUT import SCUTModule
 from dataset.HandWrite import HandWriteModule
 from copy import deepcopy
+import yaml
+import argparse
+
+def load_config(args):
+    with open(args.config) as f:
+        config = yaml.load(f, Loader=yaml.FullLoader)
+        for key, value in config.items():
+            if isinstance(value, dict):
+                for inside_key, inside_key_value in value.items():
+                    setattr(args, inside_key, inside_key_value)
+            else:
+                setattr(args, key, value)
+    return args
+
+def load_data(args):
+    dm = None
+    if args.data_module == "AOIModule": dm = AOIModule(batch_size= args.batch_size)
+    elif args.data_module == "EdgeAOIModule": dm = EdgeAOIModule(batch_size= args.batch_size)
+    elif args.data_module == "SCUTModule": dm = SCUTModule(batch_size= args.batch_size)
+    elif args.data_module == "HandWriteModule": dm = HandWriteModule(batch_size= args.batch_size)
+    dm.setup(args.stage)
+    return dm
+
+def load_model(args, dm):
+    model = None
+    if args.model_name == "CNN": model = CNN(dm.get_classes(), dm.target, args)
+    elif args.model_name == "ResNet": model = ResNet(dm.get_classes(), dm.target, args)
+    elif args.model_name == "ShuffleNet": model = ShuffleNet(dm.get_classes(), dm.target, args)
+    elif args.model_name == "VGGNet": model = VGGNet(dm.get_classes(), dm.target, args)
+    elif args.model_name == "AlexNet": model = AlexNet(dm.get_classes(), dm.target, args)
+    elif args.model_name == "GoogleNet": model = GoogleNet(dm.get_classes(), dm.target, args)
+    elif args.model_name == "DenseNet": model = DenseNet(dm.get_classes(), dm.target, args)
+    elif args.model_name == "MobileNet": model = MobileNet(dm.get_classes(), dm.target, args)
+    elif args.model_name == "SqueezeNet": model = SqueezeNet(dm.get_classes(), dm.target, args)
+    elif args.model_name == "Inception": model = Inception(dm.get_classes(), dm.target, args)
+
+    return model
 
 if __name__ == '__main__':
-    dm = AOIModule(bsz=5)
-    # dm = EdgeAOIModule(bsz=5)
-    # dm = SCUTModule(bsz=5)
-    # dm = HandWriteModule(bsz=5)
-    dm.setup('fit')
+    # Parse command line arguments.
+    parser = argparse.ArgumentParser()
+    add_arg = parser.add_argument
+    add_arg('config', nargs='?', default='configs/config.yaml',
+            help='YAML configuration file')
+    args = parser.parse_args()
 
-    # model = CNN(dm.get_classes(), dm.target)
-    # model = ResNet(dm.get_classes(), dm.target)
-    model = ShuffleNet(dm.get_classes(), dm.target)
-    # model = VGGNet(dm.get_classes(), dm.target)
-    # model = AlexNet(dm.get_classes(), dm.target)
-    # model = GoogleNet(dm.get_classes(), dm.target)
-    # model = DenseNet(dm.get_classes(), dm.target)
-    # model = MobileNet(dm.get_classes(), dm.target)
-    # model = SqueezeNet(dm.get_classes(), dm.target)
-    # model = Inception(dm.get_classes(), dm.target)
+    # Load configuration
+    config = load_config(args)
+    dm = load_data(args)
+    model = load_model(args, dm)
 
-    setattr(model, "data_name", dm.name)
-    setattr(model, "learning_rate", 1e-3)
     model.read_Best_model_path()
 
-    root_dir = os.path.join('log_dir',dm.name)
+    root_dir = os.path.join('log_dir',args.data_module)
     logger = TensorBoardLogger(root_dir, name= model.checkname, default_hp_metric =False )
 
     checkpoint_callback = ModelCheckpoint(
@@ -90,16 +120,12 @@ if __name__ == '__main__':
     gpu_stats = GPUStatsMonitor() 
 
     # AVAIL_GPUS = min(1, torch.cuda.device_count())
-    trainer = Trainer(max_epochs = 10, gpus=-1, auto_select_gpus=True, 
-                        logger=logger, num_sanity_val_steps=0, \
-                        callbacks=[checkpoint_callback, early_stop_callback, lr_monitor, gpu_stats], \
-                        accumulate_grad_batches=1, 
-                        auto_lr_find=True, 
-                        auto_scale_batch_size = 'power',
-                        limit_train_batches=10,
-                        limit_val_batches=10)
 
-    # trainer.tune(model, datamodule=dm)
+    trainer = Trainer.from_argparse_args(config, 
+                                        callbacks=[checkpoint_callback, early_stop_callback, lr_monitor, gpu_stats],
+                                        logger=logger)
+    if args.tune:
+        trainer.tune(model, datamodule=dm)
 
     trainer.fit(model, datamodule=dm)
     

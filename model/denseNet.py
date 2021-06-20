@@ -11,6 +11,7 @@ from LightningFunc.step import *
 from LightningFunc.accuracy import *
 from LightningFunc.optimizer import *
 from LightningFunc.utils import *
+from LightningFunc.losses import *
 
 def init_normal(m):
     if type(m) == nn.Linear:
@@ -23,12 +24,13 @@ def init_weights(m):
 
 
 class DenseNet(pl.LightningModule):
-    def __init__(self, num_classes, target):
+    def __init__(self, num_classes, target, args):
         super(DenseNet, self).__init__()
         self.num_classes = num_classes
+        self.args = args
 
         self.__build_model()
-
+        self.criterion = get_criterion(self.args.criterion)
         setattr(DenseNet, "training_step", training_step)
         setattr(DenseNet, "training_epoch_end", training_epoch_end)
         setattr(DenseNet, "validation_step", validation_step)
@@ -42,7 +44,6 @@ class DenseNet(pl.LightningModule):
         setattr(DenseNet, "write_Best_model_path", write_Best_model_path)
         setattr(DenseNet, "read_Best_model_path", read_Best_model_path)
 
-        self.criterion = nn.CrossEntropyLoss()
         self.target = target
         self.checkname = self.backbone
 

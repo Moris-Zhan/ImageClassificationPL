@@ -1,0 +1,54 @@
+data:
+    data_module: AOIModule
+    # n_train: 32768 #50000
+    # n_valid: 8192 #10000
+    batch_size: 5
+    stage: 'fit'
+    test: True
+
+model:
+    model_name: ShuffleNet
+
+loss:
+    criterion: CrossEntropyLoss
+    # criterion: NLLLoss
+
+optimizer:
+    optimizer: Adam # [Adam, Adagrad, RMSprop, SGD]
+    lr: 1.0e-3 
+    lr_decay: 0
+    lr_scheduler: ReduceLROnPlateau # [ReduceLROnPlateau, StepLR, MultiStepLR, ExponentialLR, CosineAnnealingLR, LambdaLR, CyclicLR]
+    patience: 3
+    threshold: 0.9
+    momentum: 0.5
+    weight_decay: 1.0e-4 
+    alpha: 0.95
+    betas: [0.1, 0.5]
+
+metrics:
+    acc: Accuracy
+
+training:
+    max_epochs: 100
+    n_epochs: 100
+    accumulate_grad_batches: 1
+
+validation:
+
+testing: 
+
+trainer:    
+    gpus: -1
+    auto_select_gpus: True
+    num_sanity_val_steps: 0
+
+fitune:
+    tune: False
+    auto_lr_find: True
+    auto_scale_batch_size: power
+   
+yaml_test:    
+    # max_epochs: 2
+    # n_epochs: 4
+    # limit_train_batches: 10
+    # limit_val_batches: 10

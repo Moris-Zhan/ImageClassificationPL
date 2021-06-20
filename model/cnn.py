@@ -7,12 +7,16 @@ from LightningFunc.step import *
 from LightningFunc.accuracy import *
 from LightningFunc.optimizer import *
 from LightningFunc.utils import *
+from LightningFunc.losses import *
 
 
 class CNN(pl.LightningModule):
-    def __init__(self, num_classes, target):
+    def __init__(self, num_classes, target, args):
         super(CNN, self).__init__()
-        # 使用序列工具快速构建
+        self.num_classes = num_classes
+        self.args = args
+
+        self.criterion = get_criterion(self.args.criterion)# 使用序列工具快速构建
         self.conv1 = nn.Sequential(
             nn.Conv2d(3, 16, kernel_size=5, padding=2),
             nn.BatchNorm2d(16),
@@ -24,7 +28,6 @@ class CNN(pl.LightningModule):
             nn.ReLU(),
             nn.MaxPool2d(2))
         self.fc = nn.Linear(128 * 128 * 32, num_classes)
-        self.criterion = nn.CrossEntropyLoss()
         self.target = target
         self.checkname = "CNN"
 

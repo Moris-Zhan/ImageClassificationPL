@@ -71,10 +71,10 @@ class EdgeAOIModule(pl.LightningDataModule):
         cls_path = os.path.join(self.root, '%s_images'%("test"), '%s\\%s'%(cls,id) )
         return cls_path   
     
-    def __init__(self, bsz):
+    def __init__(self, batch_size):
         super().__init__()
         EdgeAOI()
-        self.batch_size = bsz
+        self.batch_size = batch_size
         self.name = "EdgeAOIModule"
         self.root = "D:\\WorkSpace\\JupyterWorkSpace\\DataSet\\Image-Classification\\Edge AI Competition – AOI"
         self.classes = ["normal", "void", " horizontal defect", "vertical defect", "edge defect", "particle"]    
@@ -167,5 +167,5 @@ class EdgeAOIModule(pl.LightningDataModule):
         return self.num_classes
 
 if __name__ == '__main__':    
-    dm = EdgeAOIModule(processed=True, bsz=5)
+    dm = EdgeAOIModule(processed=True, batch_size=5)
     dm.setup('fit')
