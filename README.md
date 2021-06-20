@@ -10,7 +10,8 @@ My Frame work for ImageClassification with pytorch Lightning + Albumentations
 - [x] GPUStats Monitor
 - [x] Early stop callback
 - [x] Read Best model path
-- [ ] Lightning with Argument Parser
+- [x] Lightning with Argument Parser
+- [x] Yaml custom config
 
 ## Overview
 I organizize the object detection algorithms proposed in recent years, and focused on **`AOI`** , **`SCUT`** , **`EdgeAOI`** and **`HandWrite`** Dataset.
